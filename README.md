@@ -168,10 +168,10 @@ img_path: '/posts/20231206'
 | 게시글 작성 페이지 | GET | /post-add |  |   
 | 게시글 작성 | POST | /api/post-add | {'user_id'=user_id, 'time_stamp'=time_stamp, 'post_title'=post_title, 'post_content'=post_content } | 사용자 정보, 타임스탬프, 게시글 제목, 게시글 내용 |
 | 게시글 수정 페이지 | GET | /post-edit  |  |   
-| 게시글 수정 | PUT | /api/post-edit | {'user_id'=user_id, 'post_title'=post_title, 'post_content'=post_content} | 사용자 정보, 게시글 제목, 게시글 내용 |
+| 게시글 수정 | POST | /api/post-edit | {'user_id'=user_id, 'post_title'=post_title, 'post_content'=post_content} | 사용자 정보, 게시글 제목, 게시글 내용 |
 | 게시글 삭제 | DELETE | /api/post-edit | {'user_id'=user_id, 'post_title'=post_title, 'post_content'=post_content} | 사용자 정보, 게시글 제목, 게시글 내용 |
 | 댓글 수정 페이지 | GET | /comment-edit  |  |   
-| 댓글 수정 | PUT | /api/comment-edit | {'user_id'=user_id,'comment_content'=comment_content } | 사용자 정보, 댓글 내용 |
+| 댓글 수정 | POST | /api/comment-edit | {'user_id'=user_id,'comment_content'=comment_content } | 사용자 정보, 댓글 내용 |
 | 댓글 삭제 | DELETE | /api/comment-edit | {'user_id'=user_id,'comment_content'=comment_content } | 사용자 정보, 댓글 내용 |
 
 
