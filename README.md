@@ -161,20 +161,15 @@ img_path: '/posts/20231206'
 | :-----------: | :-----------: | :-----------: | :----------- | :----------- |
 | 로그인 페이지 | GET | /login  |  |      
 | 로그인 시도 | POST | /api/login | {'user_id'=user_id,'user_password'=user_password} | 로그인 정보 |
-
 | 회원가입 페이지 | GET | /join | {'user_id'=user_id,'user_password'=user_password} | 로그인 정보 |
 | 회원가입 시도 | POST | /api/join | {'user_id'=user_id,'user_password'=user_password} | 로그인 정보 |
-
 | 전체 게시글 조회 | GET | /index | {'user_id'=user_id, 'post_title'=post_title, 'time_stamp'=time_stamp} | 로그인 정보, 게시글 제목, 타임스탬프 |
 | 해당 게시글 조회 | GET | /post-view | {'user_id'=user_id, 'time_stamp'=time_stamp, 'post_title'=post_title, 'post_content'=post_content, 'comment_content'=comment_content } | 로그인 정보, 게시글 제목, 게시글 내용, 타임스탬프, 댓글 내용 |
-
 | 게시글 작성 페이지 | GET | /post-add |  |   
 | 게시글 작성 | POST | /api/post-add | {'user_id'=user_id, 'time_stamp'=time_stamp, 'post_title'=post_title, 'post_content'=post_content } | 사용자 정보, 타임스탬프, 게시글 제목, 게시글 내용 |
-
 | 게시글 수정 페이지 | GET | /post-edit  |  |   
 | 게시글 수정 | PUT | /api/post-edit | {'user_id'=user_id, 'post_title'=post_title, 'post_content'=post_content} | 사용자 정보, 게시글 제목, 게시글 내용 |
 | 게시글 삭제 | DELETE | /api/post-edit | {'user_id'=user_id, 'post_title'=post_title, 'post_content'=post_content} | 사용자 정보, 게시글 제목, 게시글 내용 |
-
 | 댓글 수정 페이지 | GET | /comment-edit  |  |   
 | 댓글 수정 | PUT | /api/comment-edit | {'user_id'=user_id,'comment_content'=comment_content } | 사용자 정보, 댓글 내용 |
 | 댓글 삭제 | DELETE | /api/comment-edit | {'user_id'=user_id,'comment_content'=comment_content } | 사용자 정보, 댓글 내용 |
