@@ -1,0 +1,26 @@
+        {% for chat_create in data %}
+    <div>
+        <div>
+            <p>{{ chat_create.title }}</p>
+            <p>{{ chat_create.content }}</p>
+            <form action="{{ url_for('edit_and_delete', chat_create_id=chat_create.id) }}" method="post">
+                <button type="submit" name="delete">삭제</button>
+            </form>
+            <form action="{{ url_for('edit_and_delete', chat_create_id=chat_create.id) }}" method="post">
+                <button type="submit" name="update">수정</button>
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+    {% if data_to_edit%}
+    <form action="{{ url_for('update', chat_create_id=data_to_edit.id) }}" method="post">
+        <label for="title">제목:</label>
+        <input type="text" id="title" name="title" value="{{ data_to_edit.title }}">
+
+        <label for="content">내용:</label>
+        <textarea id="content" name="content">{{ data_to_edit.content }}</textarea>
+
+        <button type="submit">수정 완료</button>
+    </form>
+    {% endif %}
+    {% include 'footer.html' %}
