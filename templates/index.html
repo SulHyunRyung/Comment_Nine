@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Index</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <h1>Index Page</h1>
+    <div>
+        {% if 'user_id' in session %}
+            <p>{{ session['user_id'] }} 님으로 로그인 되어있습니다.</p>
+            <form method="post" action="{{ url_for('logout') }}">
+                <button type="submit" class="btn btn-primary">로그아웃</button>
+            </form>
+        {% else %}
+            <p> 로그인 해주세요. </p>
+            <form method="get" action="{{ url_for('login') }}">
+                <button type="submit" class="btn btn-primary">로그인</button>
+            </form>
+        {% endif %}
+    </div>
+</body>
+</html>
