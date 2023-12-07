@@ -13,7 +13,7 @@ db = SQLAlchemy(app)
 # 데이터 베이스 생성
 class chatCreate(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    nickname = db.Column(db.String(100), nullable=False)
+    user_id = db.Column(db.String(100), nullable=False)
     title = db.Column(db.String(100), nullable=False)
     content = db.Column(db.String(100000), nullable=False)
 
@@ -34,11 +34,11 @@ def show_form():
 @app.route("/api/content_create", methods=['POST'])
 def content_create():
     id_receive = request.form.get("id")
-    nickname_receive = request.form.get("nickname")
+    user_id_receive = request.form.get("user_id")
     title_receive = request.form.get("title")
     content_receive = request.form.get("content")
 
-    chatcreate = chatCreate(id=id_receive, nickname=nickname_receive, title=title_receive, content=content_receive)
+    chatcreate = chatCreate(id=id_receive, user_id=user_id_receive, title=title_receive, content=content_receive)
     db.session.add(chatcreate)
     db.session.commit()
 
