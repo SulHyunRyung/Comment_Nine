@@ -74,10 +74,10 @@ def result():
         
         if user:
             flash('이미 존재하는 아이디입니다. 다른 아이디를 사용해주세요.')
-            return render_template('join.html')
+            return render_template('login.html')
         
         else :
-            return render_template('join.html')
+            return render_template('login.html')
         
     flash('회원가입이 완료되었습니다. 로그인해주세요.')
     return render_template('login.html')
