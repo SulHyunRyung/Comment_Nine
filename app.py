@@ -2,6 +2,9 @@ from flask import Flask, render_template, request, redirect, session, url_for, f
 from flask_sqlalchemy import SQLAlchemy
 import os
 import secrets
+import pyautogui
+pyautogui.alert
+
 basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + \
@@ -65,21 +68,23 @@ def result():
         user_id_r = request.form['user_id']
         user_password_r = request.form['user_password']
 
-        #  db에 새로운 아이디 저장
-        new_user = User(user_id=user_id_r, user_password=user_password_r)
-        db.session.add(new_user)
-        db.session.commit()
-
         user = User.query.filter_by(user_id=user_id_r).first()
         
         if user:
             flash('이미 존재하는 아이디입니다. 다른 아이디를 사용해주세요.')
-            return render_template('login.html')
+            return render_template('join.html')
         
         else :
+            flash('회원가입이 완료되었습니다. 로그인해주세요.')
+
+            #  db에 새로운 아이디 저장
+            new_user = User(user_id=user_id_r, user_password=user_password_r)
+            db.session.add(new_user)
+            db.session.commit()
+
             return render_template('login.html')
-        
-    flash('회원가입이 완료되었습니다. 로그인해주세요.')
+
+    
     return render_template('login.html')
 
 
