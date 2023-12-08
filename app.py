@@ -66,7 +66,7 @@ def login():
 @app.route('/logout', methods=['POST'])
 def logout():
     session.pop('user_id', None)  # 세션에서 사용자 ID 삭제
-    return redirect(url_for('index'))
+    return redirect(url_for('login'))
 
 
 # 회원가입 버튼 눌렀을 때 회원가입 페이지 호출용
