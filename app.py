@@ -54,11 +54,11 @@ def login():
             user_id=user_id, user_password=user_password).first()
         if user:
             session['user_id'] = user.user_id  # 세션에 사용자 ID 저장
-            # return redirect(url_for('index'))
+            # return render_template('login.html')
             #  로그인 성공 시 넘어가는 페이지 ▲
             return redirect(url_for('index'))
             # 로그인 실패 시 넘어가는 페이지 ▼
-        else:
+        else:   
             flash('아이디 또는 비밀번호를 다시 확인해주세요.', 'error')
             return render_template('login.html')
     return render_template('login.html')
@@ -66,7 +66,7 @@ def login():
 @app.route('/logout', methods=['POST'])
 def logout():
     session.pop('user_id', None)  # 세션에서 사용자 ID 삭제
-    return redirect(url_for('index'))
+    return redirect(url_for('login'))
 
 
 # 회원가입 버튼 눌렀을 때 회원가입 페이지 호출용
