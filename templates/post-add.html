@@ -5,16 +5,9 @@
 </head>
 <body>
     {% include 'header.html' %}
-    <form>
-        <div>2</div>
-        <div>1</div>
-        <nav>a</nav >
-    </form>
     <form action="{{url_for('content_create')}}" method="post">
         <div>
             <div>
-                <input type="text" name="id">
-                <input type="text" name="user_id">
                 <span>제목:</span>
                 <input type="text" name="title">
             </div>

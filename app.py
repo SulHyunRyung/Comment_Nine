@@ -15,12 +15,11 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.String, unique=True, nullable=False)
     user_password = db.Column(db.String, nullable=False)
+    posts = db.relationship('chatCreate', backref='author', lazy=True)
+
     # primary_key=True 는 고유 ID넘버를 주기 위함이고, 
     # autoincrement=True 는 가입할 때 db에 자동으로 증가하게끔 처리
     # unique=true 는 아이디를 생성할 때 고유 ID넘버가 달라도 가입할 수 있는 것을 막음.
-with app.app_context():
-    db.create_all()
-
 
 # class PostView(db.Model):
 #     id= db.Column(db.Integer, primary_key=True)
@@ -33,11 +32,11 @@ with app.app_context():
 #     db.create_all()
 
 class chatCreate(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.String(100), nullable=False)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    user_id = db.Column(db.String(100), db.ForeignKey('user.user_id'), nullable=False)
     title = db.Column(db.String(100), nullable=False)
     content = db.Column(db.String(100000), nullable=False)
-    comment = db.Column(db.String(100000))
+    #comment = db.Column(db.String(100000))
 
 with app.app_context():
     db.create_all()
@@ -50,11 +49,11 @@ def login():
         user_id = request.form['user_id']
         user_password = request.form['user_password']
         # 데이터베이스에서 사용자 조회
-        user = User.query.filter_by(
-            user_id=user_id, user_password=user_password).first()
+        user = User.query.filter_by(user_id=user_id, user_password=user_password).first()
         if user:
+            session['id'] = user.id
             session['user_id'] = user.user_id  # 세션에 사용자 ID 저장
-            return render_template('index.html')
+            return redirect(url_for('show_index'))
             #  로그인 성공 시 넘어가는 페이지 ▲
             # return redirect(url_for('index'))
             # 로그인 실패 시 넘어가는 페이지 ▼
@@ -67,7 +66,7 @@ def login():
 @app.route('/logout', methods=['POST'])
 def logout():
     session.pop('user_id', None)  # 세션에서 사용자 ID 삭제
-    return redirect(url_for('index'))
+    return redirect(url_for('login'))
 
 
 # 회원가입 버튼 눌렀을 때 회원가입 페이지 호출용
@@ -122,11 +121,13 @@ def postView():
     return render_template('postView.html', data=postview)
 
 # 홈 화면
-@app.route("/index", methods=['GET'])
-def index():
-    list = chatCreate.query.all()
+@app.route("/index", methods=['GET','POST'])
+def show_index():
+    list = db.session.query(User, chatCreate).join(chatCreate,User.user_id == chatCreate.user_id).all()
+    chat_list=chatCreate.query.all()
+    return render_template('index.html', data=chat_list)
 
-    return render_template('index.html', data=list)
+#-------------------------------------------------------홈화면
 
 #데이터 추가 테이블 화면
 @app.route("/content_create", methods=['GET'])
@@ -136,12 +137,11 @@ def show_form():
 #홈 화면에서 데이터의 값을 테이블에 넣기
 @app.route("/api/content_create", methods=['POST'])
 def content_create():
-    id_receive = request.form.get("id")
-    user_id_receive = request.form.get("user_id")
+    user_id_receive = session['user_id']
     title_receive = request.form.get("title")
     content_receive = request.form.get("content")
 
-    chatcreate = chatCreate(id=id_receive, user_id=user_id_receive, title=title_receive, content=content_receive)
+    chatcreate = chatCreate(user_id=user_id_receive, title=title_receive, content=content_receive)
     db.session.add(chatcreate)
     db.session.commit()
 
@@ -153,6 +153,7 @@ def content_create():
 @app.route("/edit/", methods=['GET'])
 def edit():
     chat_create_list =chatCreate.query.all()
+    print(chat_create_list)
     return render_template('post-edit.html',data=chat_create_list)
 
 #테이블 수정화면에서 데이터 삭제
