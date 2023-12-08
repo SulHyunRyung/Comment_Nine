@@ -54,7 +54,7 @@ def login():
             user_id=user_id, user_password=user_password).first()
         if user:
             session['user_id'] = user.user_id  # 세션에 사용자 ID 저장
-            # return render_template('login.html')
+            return render_template('index.html')
             #  로그인 성공 시 넘어가는 페이지 ▲
             return redirect(url_for('index'))
             # 로그인 실패 시 넘어가는 페이지 ▼
@@ -63,11 +63,13 @@ def login():
             return render_template('login.html')
     return render_template('login.html')
 
+
 @app.route('/logout', methods=['POST'])
 def logout():
     session.pop('user_id', None)  # 세션에서 사용자 ID 삭제
     return redirect(url_for('login'))
 
+#----------------------------------------------------------------로그아웃
 
 # 회원가입 버튼 눌렀을 때 회원가입 페이지 호출용
 @app.route('/join')
@@ -101,6 +103,7 @@ def result():
     
     return render_template('login.html')
 
+#---------------------------------------------------------------회원가입
 
 @app.route('/postView', methods=['POST'])
 def postView():
@@ -121,11 +124,13 @@ def postView():
     return render_template('postView.html', data=postview)
 
 # 홈 화면
-@app.route("/index", methods=['GET'])
-def index():
-    list = chatCreate.query.all()
+@app.route("/index", methods=['GET','POST'])
+def show_index():
+    list = db.session.query(User, chatCreate).join(chatCreate, User.user_id == chatCreate.user_id).all()
+    chat_list = chatCreate.query.all()
+    return render_template('index.html', data=chat_list)
 
-    return render_template('index.html', data=list)
+#-----------------------------------------------------------------
 
 #데이터 추가 테이블 화면
 @app.route("/content_create", methods=['GET'])
