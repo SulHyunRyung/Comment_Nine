@@ -4,6 +4,7 @@
             <h2>Comment_Nine Login</h2> 
             {% if 'user_id' in session %}
                 <p>이미 {{ session['user_id'] }}님으로 로그인 되어 있습니다.</p>
+                <a href="{{url_for('index')}}"> 인덱스 페이지로 돌아가기 </a>
             {% else %}
                 <div >
                     <form class="mb-2" method="post" action="{{ url_for('login') }}">
