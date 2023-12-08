@@ -37,8 +37,11 @@ class chatCreate(db.Model):
     user_id = db.Column(db.String(100), nullable=False)
     title = db.Column(db.String(100), nullable=False)
     content = db.Column(db.String(100000), nullable=False)
-    # comment = db.Column(db.String(100000))
+    comment = db.Column(db.String(100000))
 
+    def __repr__(self):
+        return f'<chatCreate {self.title}>'
+    
 with app.app_context():
     db.create_all()
 
@@ -54,7 +57,7 @@ def login():
             user_id=user_id, user_password=user_password).first()
         if user:
             session['user_id'] = user.user_id  # 세션에 사용자 ID 저장
-            return render_template('index.html')
+            return redirect(url_for('show_index'))
             #  로그인 성공 시 넘어가는 페이지 ▲
             # return redirect(url_for('index'))
             # 로그인 실패 시 넘어가는 페이지 ▼
@@ -105,23 +108,23 @@ def result():
 
 #---------------------------------------------------------------회원가입
 
-@app.route('/postView', methods=['POST'])
-def postView():
-    if request.method == 'POST':
-    #form에서 보낸 데이터 받아오기
-        id_receive = session.get("id")
-        comment_receive = request.form.get("comment")
+# @app.route('/postView', methods=['POST'])
+# def postView():
+#     if request.method == 'POST':
+#     #form에서 보낸 데이터 받아오기
+#         id_receive = session.get("id")
+#         comment_receive = request.form.get("comment")
 
-    # 데이터를 DB(postview)에 저장하기
-        postview = chatCreate(
-            id=id_receive,
-            comment=comment_receive
-        )
+#     # 데이터를 DB(postview)에 저장하기
+#         postview = chatCreate(
+#             id=id_receive,
+#             comment=comment_receive
+#         )
 
-        db.session.add(postview)
-        db.session.commit()
+#         db.session.add(postview)
+#         db.session.commit()
 
-    return render_template('postView.html', data=postview)
+#     return render_template('postView.html', data=postview)
 
 # 홈 화면
 @app.route("/index", methods=['GET','POST'])
@@ -144,18 +147,42 @@ def content_create():
     user_id_receive = request.form.get("user_id")
     title_receive = request.form.get("title")
     content_receive = request.form.get("content")
+    comment_receive = request.form.get("comment")
 
-    chatcreate = chatCreate(id=id_receive, user_id=user_id_receive, title=title_receive, content=content_receive)
+    chatcreate = chatCreate(id=id_receive, user_id=user_id_receive, title=title_receive, content=content_receive, comment=comment_receive)
     db.session.add(chatcreate)
     db.session.commit()
 
     return redirect(url_for('show_form'))
+
+#코멘트 데이터 추가 테이블 화면
+@app.route("/comment_create", methods=['GET'])
+def show_comment():
+    return render_template('content-add.html')
+
+# 코멘트 추가 테이블 넣기
+@app.route("/api/comment_create", methods=['POST'])
+def comment_create():
+    id_receive = request.form.get("id")
+    user_id_receive = request.form.get("user_id")
+    title_receive = request.form.get("title")
+    content_receive = request.form.get("content")
+    comment_receive = request.form.get("comment")
+
+    chatcreate = chatCreate(id=id_receive, user_id=user_id_receive, title=title_receive, content=content_receive, comment=comment_receive)
+    db.session.add(chatcreate)
+    db.session.commit()
+
+    return redirect(url_for('show_comment'))
 
 # -------------------------------------------------------------------------------------------------데이터 추가 완성 라인
 
 # 수정,삭제 화면
 @app.route("/edit/", methods=['GET'])
 def edit():
+    # user_id = session.get('user_id')
+    # title=chatCreate.query.filter_by(user_id==user_id).first()
+    # title = session.get('title')
     chat_create_list =chatCreate.query.all()
     return render_template('post-edit.html',data=chat_create_list)
 
@@ -173,6 +200,7 @@ def edit_and_delete(chat_create_id):
             # 수정 폼으로 리다이렉트
             return redirect(url_for('api_update',chat_create_id=chat_create_id))
     return redirect(url_for('edit'))
+
 
 @app.route("/api/update/<int:chat_create_id>/", methods=['GET'])
 def api_update(chat_create_id):

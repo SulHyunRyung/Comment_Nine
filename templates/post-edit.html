@@ -1,17 +1,40 @@
-        {% for chat_create in data %}
+{% include 'header.html' %}
+
+        <!-- {% for chat_create in data %} -->
     <div>
         <div>
-            <p>{{ chat_create.title }}</p>
+            <div class="overflow-hidden rounded-lg border border-gray-200 shadow-sm focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600">
+            <p>{{ chat_create.title }} by {{ chat_create.user_id }}</p>
             <p>{{ chat_create.content }}</p>
-            <form action="{{ url_for('edit_and_delete', chat_create_id=chat_create.id) }}" method="post">
-                <button type="submit" name="delete">삭제</button>
-            </form>
-            <form action="{{ url_for('edit_and_delete', chat_create_id=chat_create.id) }}" method="post">
-                <button type="submit" name="update">수정</button>
-            </form>
+                <div class="flex items-center justify-end gap-2 bg-white p-3">
+                    <form action="{{ url_for('edit_and_delete', chat_create_id=chat_create.id) }}" method="post">
+                    <button type="submit" name="delete" class="rounded bg-gray-200 px-3 py-1.5 text-sm font-medium text-gray-700 hover:text-gray-600">삭제</button></form>
+                    <form action="{{ url_for('edit_and_delete', chat_create_id=chat_create.id) }}" method="post">
+                    <button type="submit" name="update" class="rounded bg-indigo-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-indigo-700">수정</button></form>
+                </div>
+            </div>
         </div>
-        {% endfor %}
+
+
+
+
+        <div>
+            <!-- <label for="user_id">{{ chat_create.user_id }}</label>
+            <input type="text" name="user_id" value="{{ chat_create.user_id }}"> -->
+            <label for="OrderNotes" class="sr-only">comments</label>
+            <div class="overflow-hidden rounded-lg border border-gray-200 shadow-sm focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600">
+            <textarea id="comment" name="comment" class="w-full resize-none border-none align-top focus:ring-0 sm:text-sm" rows="4" placeholder="댓글 리뷰를 작성하세요"></textarea>
+            <div class="flex items-center justify-end gap-2 bg-white p-3">
+                <form action="{{ url_for('show_index')}}" method="get"> 
+                <button type="submit" class="rounded bg-gray-200 px-3 py-1.5 text-sm font-medium text-gray-700 hover:text-gray-600">취소</button></form>
+                <form action="{{ url_for('comment_create')}}" method="post">
+                <button type="submit" class="rounded bg-indigo-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-indigo-700">리뷰 작성 완료</button></form>
+            </div></div>
+        </div>
+        <!-- {% endfor %} -->
     </div>
+
+
     {% if data_to_edit%}
     <form action="{{ url_for('update', chat_create_id=data_to_edit.id) }}" method="post">
         <label for="title">제목:</label>
@@ -23,4 +46,5 @@
         <button type="submit">수정 완료</button>
     </form>
     {% endif %}
-    {% include 'footer.html' %}
+
+{% include 'footer.html' %}
