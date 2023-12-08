@@ -37,7 +37,7 @@ class chatCreate(db.Model):
     user_id = db.Column(db.String(100), nullable=False)
     title = db.Column(db.String(100), nullable=False)
     content = db.Column(db.String(100000), nullable=False)
-    comment = db.Column(db.String(100000))
+    # comment = db.Column(db.String(100000))
 
 with app.app_context():
     db.create_all()
@@ -56,7 +56,7 @@ def login():
             session['user_id'] = user.user_id  # 세션에 사용자 ID 저장
             return render_template('index.html')
             #  로그인 성공 시 넘어가는 페이지 ▲
-            return redirect(url_for('index'))
+            # return redirect(url_for('index'))
             # 로그인 실패 시 넘어가는 페이지 ▼
         else:   
             flash('아이디 또는 비밀번호를 다시 확인해주세요.', 'error')
