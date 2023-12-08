@@ -15,11 +15,12 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.String, unique=True, nullable=False)
     user_password = db.Column(db.String, nullable=False)
+    posts = db.relationship('chatCreate', backref='author', lazy=True)
     # primary_key=True 는 고유 ID넘버를 주기 위함이고, 
     # autoincrement=True 는 가입할 때 db에 자동으로 증가하게끔 처리
     # unique=true 는 아이디를 생성할 때 고유 ID넘버가 달라도 가입할 수 있는 것을 막음.
-with app.app_context():
-    db.create_all()
+# with app.app_context():
+#     db.create_all()
 
 
 # class PostView(db.Model):
@@ -33,8 +34,8 @@ with app.app_context():
 #     db.create_all()
 
 class chatCreate(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.String(100), nullable=False)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    user_id = db.Column(db.String(100), db.ForeignKey('user.user_id'), nullable=False)
     title = db.Column(db.String(100), nullable=False)
     content = db.Column(db.String(100000), nullable=False)
     comment = db.Column(db.String(100000))
@@ -143,13 +144,11 @@ def show_form():
 #홈 화면에서 데이터의 값을 테이블에 넣기
 @app.route("/api/content_create", methods=['POST'])
 def content_create():
-    id_receive = request.form.get("id")
-    user_id_receive = request.form.get("user_id")
+    user_id_receive = session['user_id']
     title_receive = request.form.get("title")
     content_receive = request.form.get("content")
-    comment_receive = request.form.get("comment")
 
-    chatcreate = chatCreate(id=id_receive, user_id=user_id_receive, title=title_receive, content=content_receive, comment=comment_receive)
+    chatcreate = chatCreate(user_id=user_id_receive, title=title_receive, content=content_receive)
     db.session.add(chatcreate)
     db.session.commit()
 
@@ -183,6 +182,7 @@ def edit():
     # user_id = session.get('user_id')
     # title=chatCreate.query.filter_by(user_id==user_id).first()
     # title = session.get('title')
+    # title =chatCreate.title
     chat_create_list =chatCreate.query.all()
     return render_template('post-edit.html',data=chat_create_list)
 

@@ -5,15 +5,19 @@
 
     {% for chat in data %}
     <div class="flow-root"><dl class="-my-3 divide-y divide-gray-100 text-sm"><div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-        <dt class="font-medium text-gray-900" name="title" value="title" onclick="location.href='edit'">{{chat.title}}</dt><dd class="text-gray-700 sm:col-span-2"></dd>
+        <div class="font-medium text-gray-900" name="title" value="title" onclick="location.href='edit',user_id =user_id">{{chat.title}}</div>
+        <dd class="text-gray-700 sm:col-span-2"></dd>
         </div>
-    </dl>
     </div>
-        {% endfor %}
     </form>
+    {% endfor %}
     
     <form action="{{ url_for('show_form')}}" method="get"> 
         <button type="submit" class="rounded bg-indigo-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-indigo-700">작성하기</button>
     </div>
+    </form>
+
+    <form action="{{url_for('logout')}} "method="post">
+        <button type="submit">로그아웃</button>
     </form>
 {% include 'footer.html' %}
