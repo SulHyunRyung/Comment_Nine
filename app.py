@@ -40,8 +40,8 @@ class chatCreate(db.Model):
     content = db.Column(db.String(100000), nullable=False)
     comment = db.Column(db.String(100000))
 
-    def __repr__(self):
-        return f'<chatCreate {self.title}>'
+def __repr__(self):
+    return f'<chatCreate {self.title}>'
     
 with app.app_context():
     db.create_all()
@@ -152,7 +152,7 @@ def content_create():
     db.session.add(chatcreate)
     db.session.commit()
 
-    return redirect(url_for('show_form'))
+    return redirect(url_for('show_index'))
 
 #코멘트 데이터 추가 테이블 화면
 @app.route("/comment_create", methods=['GET'])
@@ -179,11 +179,7 @@ def comment_create():
 # 수정,삭제 화면
 @app.route("/edit/", methods=['GET'])
 def edit():
-    # user_id = session.get('user_id')
-    # title=chatCreate.query.filter_by(user_id==user_id).first()
-    # title = session.get('title')
-    # title =chatCreate.title
-    chat_create_list =chatCreate.query.all()
+    chat_create_list= chatCreate.query
     return render_template('post-edit.html',data=chat_create_list)
 
 #테이블 수정화면에서 데이터 삭제
